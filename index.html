@@ -78,6 +78,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Model-Design-三" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/04/04/Model-Design-%E4%B8%89/" class="article-date">
+  <time class="dt-published" datetime="2023-04-04T03:17:33.000Z" itemprop="datePublished">2023-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/04/04/Model-Design-%E4%B8%89/">设计模式（三）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在此是 设计原则部分的简单整理</p>
+<h3 id="单一职责原则（SRP）"><a href="#单一职责原则（SRP）" class="headerlink" title="单一职责原则（SRP）"></a>单一职责原则（SRP）</h3><p><code>Single Responsibility Principle</code></p>
+<h3 id="开闭原则（OCP）"><a href="#开闭原则（OCP）" class="headerlink" title="开闭原则（OCP）"></a>开闭原则（OCP）</h3><p><code>Open Close Principle</code></p>
+<p>“对扩展开放、对修改关闭”</p>
+<p>这条原则的设计初衷：只要它没有破坏原有的代码的正常运行，没有破坏原有的单元测试，我们就可以说，这是一个合格的代码改动。</p>
+<p>该原则是衡量扩展性的重要标准</p>
+<h3 id="里氏替换原则（LSP）"><a href="#里氏替换原则（LSP）" class="headerlink" title="里氏替换原则（LSP）"></a>里氏替换原则（LSP）</h3><p><code>Liskov Substitution Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If S is a subtype of T, then objects of type T may be replaced with objects of type S, without breaking the program。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Functions that use pointers of references to base classes must be able to use objects of derived classes without knowing it。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">子类对象（object of subtype/derived class）能够替换程序（program）中父类对象（object of base/parent class）出现的任何地方，并且保证原来程序的逻辑行为（behavior）不变及正确性不被破坏。</span><br></pre></td></tr></table></figure>
+
+<p>里氏替换可以说是用了多态的特性，但是注重的是替换后要<code>保证程序的逻辑行为不变</code> （例如 同样的输入 父类正常 在替换成子类后抛出异常 那就违反了该规则）</p>
+<p>“Design By Contract” （按照协议来设计）子类在设计的时候要完全遵循父类的行为约定</p>
+<h3 id="接口隔离原则（ISP）"><a href="#接口隔离原则（ISP）" class="headerlink" title="接口隔离原则（ISP）"></a>接口隔离原则（ISP）</h3><p><code>Interface Segregation Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Clients should not be forced to depend upon interfaces that they not use.</span><br></pre></td></tr></table></figure>
+
+<p>不要让使用者（调用者）依赖它们不需要的功能</p>
+<h3 id="依赖反转原则（DIP）"><a href="#依赖反转原则（DIP）" class="headerlink" title="依赖反转原则（DIP）"></a>依赖反转原则（DIP）</h3><p><code>Dependency Inversion Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">High-level modules shouldn’t depend on low-level modules. Both modules should depend on abstractions. In addition, abstractions shouldn’t depend on details. Details depend on abstractions.</span><br><span class="line"></span><br><span class="line">高层模块（high-level modules）不要依赖低层模块（low-level）。高层模块和低层模块应该通过抽象（abstractions）来互相依赖。除此之外，抽象（abstractions）不要依赖具体实现细节（details），具体实现细节（details）依赖抽象（abstractions）。</span><br></pre></td></tr></table></figure>
+
+<p>IOC：控制反转</p>
+<p>DI：依赖注入   提高了代码的扩展性，我们可以灵活地替换依赖的类。 它是编写可测试性代码最有效的手段。</p>
+<hr>
+<h3 id="KISS原则-amp-amp-YAGNI原则"><a href="#KISS原则-amp-amp-YAGNI原则" class="headerlink" title="KISS原则 &amp;&amp; YAGNI原则"></a>KISS原则 &amp;&amp; YAGNI原则</h3><p>“Keep It Simple And Stupid”</p>
+<p>“You Ain’t Gonna Need It”  不要过度设计（不需要不必要的实现 但是扩展点或者说可扩展性还是要考虑的）</p>
+<h3 id="DRY原则"><a href="#DRY原则" class="headerlink" title="DRY原则"></a>DRY原则</h3><p>“Don’t Repeat Yourself”</p>
+<p>写出可复用性好的代码</p>
+<p>“我们可以不写可复用的代码，但一定不能写重复的代码”</p>
+<h3 id="迪米特法则（LOD）"><a href="#迪米特法则（LOD）" class="headerlink" title="迪米特法则（LOD）"></a>迪米特法则（LOD）</h3><p><code>Law Of Demeter</code></p>
+<p><code>The Least Knowledge Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不该有直接依赖关系的类之间，不要有依赖；有依赖关系的类之间，尽量只依赖必要的接口（也就是定义中的“有限知识”）。</span><br></pre></td></tr></table></figure>
+
+<p>“高内聚、松耦合”</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>“创造的一大秘诀是要懂得如何隐藏你的来源”</p>
+<p>系统设计的一个基本流程：</p>
+<ol>
+<li>合理地将功能划分到不同的模块</li>
+<li>设计模块与模块之间的交互关系</li>
+<li>设计模块的接口、数据库、业务模型</li>
+</ol>
+<p>对于一个非业务通用框架的开发要考虑的点：</p>
+<ol>
+<li>易用性</li>
+<li>性能</li>
+<li>扩展性： 这里的扩展性 是指使用方的扩展性，在不改变源码的情况下 定制需求</li>
+<li>容错性</li>
+<li>通用性</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clg1oyda60002b8owhhbvf76w" data-title="设计模式（三）" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Model-Design-二" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/04/03/Model-Design-%E4%BA%8C/" class="article-date">
@@ -92,7 +180,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式(二)</a>
+      <a class="p-name article-title" href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
     </h1>
   
 
@@ -164,7 +252,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clg09f2r40002bzolgifgfqld" data-title="设计模式(二)" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clg1oyda90004b8owdojr6czu" data-title="设计模式（二）" class="article-share-link">分享</a>
       
       
       
@@ -192,7 +280,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式(一)</a>
+      <a class="p-name article-title" href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
     </h1>
   
 
@@ -303,7 +391,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clg09f2r10001bzol1gjdbc0f" data-title="设计模式(一)" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clg1oyda40001b8ow7u2865i7" data-title="设计模式（一）" class="article-share-link">分享</a>
       
       
       
@@ -344,7 +432,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clg09f2qv0000bzolgvoq02bh" data-title="About me" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clg1oyd9z0000b8owev2pd6ve" data-title="About me" class="article-share-link">分享</a>
       
       
       
@@ -401,11 +489,15 @@
       <ul>
         
           <li>
-            <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式(二)</a>
+            <a href="/2023/04/04/Model-Design-%E4%B8%89/">设计模式（三）</a>
           </li>
         
           <li>
-            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式(一)</a>
+            <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
           </li>
         
           <li>

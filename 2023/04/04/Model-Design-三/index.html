@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>设计模式（三） | Ducky Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="说明在此是 设计原则部分的简单整理 单一职责原则（SRP）Single Responsibility Principle 开闭原则（OCP）Open Close Principle “对扩展开放、对修改关闭” 这条原则的设计初衷：只要它没有破坏原有的代码的正常运行，没有破坏原有的单元测试，我们就可以说，这是一个合格的代码改动。 该原则是衡量扩展性的重要标准 里氏替换原则（LSP）Liskov Su">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式（三）">
+<meta property="og:url" content="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/index.html">
+<meta property="og:site_name" content="Ducky Blog">
+<meta property="og:description" content="说明在此是 设计原则部分的简单整理 单一职责原则（SRP）Single Responsibility Principle 开闭原则（OCP）Open Close Principle “对扩展开放、对修改关闭” 这条原则的设计初衷：只要它没有破坏原有的代码的正常运行，没有破坏原有的单元测试，我们就可以说，这是一个合格的代码改动。 该原则是衡量扩展性的重要标准 里氏替换原则（LSP）Liskov Su">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-04T03:17:33.000Z">
+<meta property="article:modified_time" content="2023-04-04T03:18:59.894Z">
+<meta property="article:author" content="黯言">
+<meta property="article:tag" content="go cs">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Ducky Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Ducky Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">just so so</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://ducknightii.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Model-Design-三" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/04/04/Model-Design-%E4%B8%89/" class="article-date">
+  <time class="dt-published" datetime="2023-04-04T03:17:33.000Z" itemprop="datePublished">2023-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      设计模式（三）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在此是 设计原则部分的简单整理</p>
+<h3 id="单一职责原则（SRP）"><a href="#单一职责原则（SRP）" class="headerlink" title="单一职责原则（SRP）"></a>单一职责原则（SRP）</h3><p><code>Single Responsibility Principle</code></p>
+<h3 id="开闭原则（OCP）"><a href="#开闭原则（OCP）" class="headerlink" title="开闭原则（OCP）"></a>开闭原则（OCP）</h3><p><code>Open Close Principle</code></p>
+<p>“对扩展开放、对修改关闭”</p>
+<p>这条原则的设计初衷：只要它没有破坏原有的代码的正常运行，没有破坏原有的单元测试，我们就可以说，这是一个合格的代码改动。</p>
+<p>该原则是衡量扩展性的重要标准</p>
+<h3 id="里氏替换原则（LSP）"><a href="#里氏替换原则（LSP）" class="headerlink" title="里氏替换原则（LSP）"></a>里氏替换原则（LSP）</h3><p><code>Liskov Substitution Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If S is a subtype of T, then objects of type T may be replaced with objects of type S, without breaking the program。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Functions that use pointers of references to base classes must be able to use objects of derived classes without knowing it。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">子类对象（object of subtype/derived class）能够替换程序（program）中父类对象（object of base/parent class）出现的任何地方，并且保证原来程序的逻辑行为（behavior）不变及正确性不被破坏。</span><br></pre></td></tr></table></figure>
+
+<p>里氏替换可以说是用了多态的特性，但是注重的是替换后要<code>保证程序的逻辑行为不变</code> （例如 同样的输入 父类正常 在替换成子类后抛出异常 那就违反了该规则）</p>
+<p>“Design By Contract” （按照协议来设计）子类在设计的时候要完全遵循父类的行为约定</p>
+<h3 id="接口隔离原则（ISP）"><a href="#接口隔离原则（ISP）" class="headerlink" title="接口隔离原则（ISP）"></a>接口隔离原则（ISP）</h3><p><code>Interface Segregation Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Clients should not be forced to depend upon interfaces that they not use.</span><br></pre></td></tr></table></figure>
+
+<p>不要让使用者（调用者）依赖它们不需要的功能</p>
+<h3 id="依赖反转原则（DIP）"><a href="#依赖反转原则（DIP）" class="headerlink" title="依赖反转原则（DIP）"></a>依赖反转原则（DIP）</h3><p><code>Dependency Inversion Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">High-level modules shouldn’t depend on low-level modules. Both modules should depend on abstractions. In addition, abstractions shouldn’t depend on details. Details depend on abstractions.</span><br><span class="line"></span><br><span class="line">高层模块（high-level modules）不要依赖低层模块（low-level）。高层模块和低层模块应该通过抽象（abstractions）来互相依赖。除此之外，抽象（abstractions）不要依赖具体实现细节（details），具体实现细节（details）依赖抽象（abstractions）。</span><br></pre></td></tr></table></figure>
+
+<p>IOC：控制反转</p>
+<p>DI：依赖注入   提高了代码的扩展性，我们可以灵活地替换依赖的类。 它是编写可测试性代码最有效的手段。</p>
+<hr>
+<h3 id="KISS原则-amp-amp-YAGNI原则"><a href="#KISS原则-amp-amp-YAGNI原则" class="headerlink" title="KISS原则 &amp;&amp; YAGNI原则"></a>KISS原则 &amp;&amp; YAGNI原则</h3><p>“Keep It Simple And Stupid”</p>
+<p>“You Ain’t Gonna Need It”  不要过度设计（不需要不必要的实现 但是扩展点或者说可扩展性还是要考虑的）</p>
+<h3 id="DRY原则"><a href="#DRY原则" class="headerlink" title="DRY原则"></a>DRY原则</h3><p>“Don’t Repeat Yourself”</p>
+<p>写出可复用性好的代码</p>
+<p>“我们可以不写可复用的代码，但一定不能写重复的代码”</p>
+<h3 id="迪米特法则（LOD）"><a href="#迪米特法则（LOD）" class="headerlink" title="迪米特法则（LOD）"></a>迪米特法则（LOD）</h3><p><code>Law Of Demeter</code></p>
+<p><code>The Least Knowledge Principle</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不该有直接依赖关系的类之间，不要有依赖；有依赖关系的类之间，尽量只依赖必要的接口（也就是定义中的“有限知识”）。</span><br></pre></td></tr></table></figure>
+
+<p>“高内聚、松耦合”</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>“创造的一大秘诀是要懂得如何隐藏你的来源”</p>
+<p>系统设计的一个基本流程：</p>
+<ol>
+<li>合理地将功能划分到不同的模块</li>
+<li>设计模块与模块之间的交互关系</li>
+<li>设计模块的接口、数据库、业务模型</li>
+</ol>
+<p>对于一个非业务通用框架的开发要考虑的点：</p>
+<ol>
+<li>易用性</li>
+<li>性能</li>
+<li>扩展性： 这里的扩展性 是指使用方的扩展性，在不改变源码的情况下 定制需求</li>
+<li>容错性</li>
+<li>通用性</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clg1oyda60002b8owhhbvf76w" data-title="设计模式（三）" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/04/03/Model-Design-%E4%BA%8C/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">设计模式（二）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">四月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/04/04/Model-Design-%E4%B8%89/">设计模式（三）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/About-me/">About me</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 黯言<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
