@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>设计模式（五） | DarkNight&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="说明在此是 设计模式-创建型 部分的简单整理 单例模式解决问题 处理资源访问冲突。 例如 写同一文件 表示全局唯一类。 例如 配置信息类、唯一自增ID生成类  实现方式 饿汉方式： 类加载时 直接创建 懒汉方式： 需要时创建  一些问题 隐藏了依赖关系， 不利于阅读 可扩展性差 可测试性差； 在有外部依赖时，很难替换（mock） 不支持传参构造（或者说传参会有歧义）  工厂模式 第一种情况：当代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式（五）">
+<meta property="og:url" content="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/index.html">
+<meta property="og:site_name" content="DarkNight&#39;s Blog">
+<meta property="og:description" content="说明在此是 设计模式-创建型 部分的简单整理 单例模式解决问题 处理资源访问冲突。 例如 写同一文件 表示全局唯一类。 例如 配置信息类、唯一自增ID生成类  实现方式 饿汉方式： 类加载时 直接创建 懒汉方式： 需要时创建  一些问题 隐藏了依赖关系， 不利于阅读 可扩展性差 可测试性差； 在有外部依赖时，很难替换（mock） 不支持传参构造（或者说传参会有歧义）  工厂模式 第一种情况：当代码">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-07T12:03:30.000Z">
+<meta property="article:modified_time" content="2023-04-07T12:04:47.987Z">
+<meta property="article:author" content="黯言">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="DarkNight's Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">DarkNight&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">just so so</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://ducknightii.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Model-Design-五" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/04/07/Model-Design-%E4%BA%94/" class="article-date">
+  <time class="dt-published" datetime="2023-04-07T12:03:30.000Z" itemprop="datePublished">2023-04-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      设计模式（五）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在此是 设计模式-创建型 部分的简单整理</p>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><ul>
+<li>处理资源访问冲突。 例如 写同一文件</li>
+<li>表示全局唯一类。 例如 配置信息类、唯一自增ID生成类</li>
+</ul>
+<h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
+<li>饿汉方式： 类加载时 直接创建</li>
+<li>懒汉方式： 需要时创建</li>
+</ul>
+<h4 id="一些问题"><a href="#一些问题" class="headerlink" title="一些问题"></a>一些问题</h4><ul>
+<li>隐藏了依赖关系， 不利于阅读</li>
+<li>可扩展性差</li>
+<li>可测试性差； 在有外部依赖时，很难替换（mock）</li>
+<li>不支持传参构造（或者说传参会有歧义）</li>
+</ul>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><ul>
+<li>第一种情况：当代码中存在 if-else 分支判断，动态地根据不同的类型创建不同的对象。针对这种情况，我们就考虑使用工厂模式，将这一大坨 if-else 创建对象的代码抽离出来，放到工厂类中。</li>
+<li>还有一种情况，尽管我们不需要根据不同的类型创建不同的对象，但是，单个对象本身的创建过程比较复杂，需要组合其他类对象，做各种初始化操作。在这种情况下，我们也可以考虑使用工厂模式，将对象的创建过程封装到工厂类中。</li>
+</ul>
+<h4 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> simple_factory</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Parser <span class="keyword">interface</span> &#123;</span><br><span class="line">	Parse(filepath <span class="type">string</span>) <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// CreateParser 简单工厂</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateParser</span><span class="params">(ext <span class="type">string</span>)</span></span> Parser &#123;</span><br><span class="line">	<span class="keyword">switch</span> ext &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;json&quot;</span>:</span><br><span class="line">		<span class="keyword">return</span> JsonParser&#123;&#125;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;yaml&quot;</span>:</span><br><span class="line">		<span class="keyword">return</span> YamlParser&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> JsonParser <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(j JsonParser)</span></span> Parse(filePath <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> YamlParser <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(y YamlParser)</span></span> Parse(filePath <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><p>当工厂的构建比较复杂时 我们就可以把构造过程单独抽象成类或者方法，避免入口函数过于复杂</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> func_factory</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> ParseFactory <span class="keyword">interface</span> &#123;</span><br><span class="line">	CreateParser() Parser</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> parseFactoryMap = <span class="keyword">map</span>[<span class="type">string</span>]ParseFactory&#123;</span><br><span class="line">	<span class="string">&quot;json&quot;</span>: JsonParseFactory&#123;&#125;,</span><br><span class="line">	<span class="string">&quot;yaml&quot;</span>: YamlParseFactory&#123;&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// GetParseFactory 工厂方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetParseFactory</span><span class="params">(ext <span class="type">string</span>)</span></span> ParseFactory &#123;</span><br><span class="line">	<span class="keyword">return</span> parseFactoryMap[ext]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> JsonParseFactory <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(j JsonParseFactory)</span></span> CreateParser() Parser &#123;</span><br><span class="line">	<span class="keyword">var</span> parse = <span class="built_in">new</span>(JsonParser)</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> parse</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> YamlParseFactory <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(y YamlParseFactory)</span></span> CreateParser() Parser &#123;</span><br><span class="line">	<span class="keyword">var</span> parse = <span class="built_in">new</span>(YamlParser)</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> parse</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Parser <span class="keyword">interface</span> &#123;</span><br><span class="line">	Parse(filePath <span class="type">string</span>) <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> JsonParser <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(j JsonParser)</span></span> Parse(filePath <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> YamlParser <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(y YamlParser)</span></span> Parse(filePath <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h4><p>让一个工厂负责创建多个不同类型的对象。为应对多种规则产生不同的类组合而产生的一种解决方案。</p>
+<p>提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。</p>
+<h4 id="后言"><a href="#后言" class="headerlink" title="后言"></a>后言</h4><p>其实在支持函数式编程的语言中 完全不用创建工厂类，构造一个 <code>map[string]func</code> 就可以了</p>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><p>当传递参数过多、参数之间有依赖 或者 需要构建不可变对象（不能创建后 再通过set更新属性值）时，就可以考虑使用 建造者模式。</p>
+<details>
+  <summary>建造者示例</summary>
+
+<pre><code>package builder
+
+import &quot;errors&quot;
+
+const (
+    DefaultMaxTotal = 8
+    DefaultMinIdle  = 0
+    DefaultMaxIdle  = 8
+)
+
+func NewBuilder() Builder &#123;
+    return Builder&#123;
+        name:     &quot;&quot;,
+        maxTotal: DefaultMaxTotal,
+        minIdle:  DefaultMinIdle,
+        maxIdle:  DefaultMaxIdle,
+    &#125;
+&#125;
+
+type Builder struct &#123;
+    name     string
+    maxTotal int
+    minIdle  int
+    maxIdle  int
+&#125;
+
+func (b *Builder) SetName(name string) &#123;
+    b.name = name
+&#125;
+
+func (b *Builder) SerMaxTotal(total int) &#123;
+    b.maxTotal = total
+&#125;
+
+func (b *Builder) SetMaxIdle(idle int) &#123;
+    b.maxIdle = idle
+&#125;
+
+func (b *Builder) SetMinIdle(idle int) &#123;
+    b.minIdle = idle
+&#125;
+func (b *Builder) Build() (pool *ResourcePool, err error) &#123;
+    if b.name == &quot;&quot; &#123;
+        return nil, errors.New(&quot;name empty&quot;)
+    &#125;
+    if b.maxTotal &lt; b.maxIdle &#123;
+        return nil, errors.New(&quot;maxTotal can not be less than maxIdle&quot;)
+    &#125;
+    if b.maxIdle &lt; b.minIdle &#123;
+        return nil, errors.New(&quot;maxIdle can not be less than minIdle&quot;)
+    &#125;
+    // ... other check
+
+    pool = &amp;ResourcePool&#123;
+        name:     b.name,
+        maxTotal: b.maxTotal,
+        minIdle:  b.minIdle,
+        maxIdle:  b.maxIdle,
+    &#125;
+
+    return
+&#125;
+
+type ResourcePool struct &#123;
+    name     string
+    maxTotal int
+    minIdle  int
+    maxIdle  int
+    // ...
+&#125;
+
+
+// user demo
+pool, err := NewBuilder().
+    SetName(&quot;test&quot;).
+    SerMaxTotal(20).
+    Build()
+</code></pre>
+</details>
+
+
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><p>基于一个已有对象创建出一个新的对象。</p>
+<p>“深拷贝与浅拷贝”</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clg6i25ep0005aund5cdg7mdp" data-title="设计模式（五）" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/04/06/Model-Design-%E5%9B%9B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">设计模式（四）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">四月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/04/07/Model-Design-%E4%BA%94/">设计模式（五）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/06/Model-Design-%E5%9B%9B/">设计模式（四）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/04/Model-Design-%E4%B8%89/">设计模式（三）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 黯言<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
