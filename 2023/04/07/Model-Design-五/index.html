@@ -14,7 +14,7 @@
 <meta property="og:description" content="说明在此是 设计模式-创建型 部分的简单整理 单例模式解决问题 处理资源访问冲突。 例如 写同一文件 表示全局唯一类。 例如 配置信息类、唯一自增ID生成类  实现方式 饿汉方式： 类加载时 直接创建 懒汉方式： 需要时创建  一些问题 隐藏了依赖关系， 不利于阅读 可扩展性差 可测试性差； 在有外部依赖时，很难替换（mock） 不支持传参构造（或者说传参会有歧义）  工厂模式 第一种情况：当代码">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-04-07T12:03:30.000Z">
-<meta property="article:modified_time" content="2023-04-07T12:04:47.987Z">
+<meta property="article:modified_time" content="2023-04-10T11:39:18.331Z">
 <meta property="article:author" content="黯言">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
@@ -203,7 +203,7 @@ type ResourcePool struct &#123;
 &#125;
 
 
-// user demo
+// use demo
 pool, err := NewBuilder().
     SetName(&quot;test&quot;).
     SerMaxTotal(20).
@@ -218,7 +218,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clg6i25ep0005aund5cdg7mdp" data-title="设计模式（五）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clgargvwv0005emonclty6zfl" data-title="设计模式（五）" class="article-share-link">分享</a>
       
       
       
@@ -229,6 +229,15 @@ pool, err := NewBuilder().
   
     
 <nav id="article-nav">
+  
+    <a href="/2023/04/10/Model-Design-%E5%85%AD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          设计模式（六）
+        
+      </div>
+    </a>
   
   
     <a href="/2023/04/06/Model-Design-%E5%9B%9B/" id="article-nav-older" class="article-nav-link-wrap">
@@ -285,6 +294,10 @@ pool, err := NewBuilder().
       <ul>
         
           <li>
+            <a href="/2023/04/10/Model-Design-%E5%85%AD/">设计模式（六）</a>
+          </li>
+        
+          <li>
             <a href="/2023/04/07/Model-Design-%E4%BA%94/">设计模式（五）</a>
           </li>
         
@@ -298,10 +311,6 @@ pool, err := NewBuilder().
         
           <li>
             <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
           </li>
         
       </ul>

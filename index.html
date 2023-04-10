@@ -78,6 +78,314 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Model-Design-六" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/04/10/Model-Design-%E5%85%AD/" class="article-date">
+  <time class="dt-published" datetime="2023-04-10T11:37:52.000Z" itemprop="datePublished">2023-04-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/04/10/Model-Design-%E5%85%AD/">设计模式（六）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在此是 设计模式-结构型 部分的简单整理</p>
+<p>结构型模式主要总结了一些类或对象组合在一起的经典结构</p>
+<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p>在不改变原始类（被代理类）的情况下，通过引入代理类来给原始类附加功能。</p>
+<details>
+    <summary>代理模式示例</summary>
+
+<pre><code>package proxy
+
+import &quot;context&quot;
+
+type UserController struct &#123;
+&#125;
+
+func (u UserController) Login(c context.Context) &#123;
+    // do something
+&#125;
+
+func (u UserController) Register(c context.Context) &#123;
+    // do something
+&#125;
+
+type RequestInfo struct &#123;
+    ApiName    string
+    Timestamp  int64
+    ResponseMs int32
+&#125;
+
+type MetricReporter struct &#123;
+&#125;
+
+func (m MetricReporter) Reporter(info RequestInfo) &#123;
+    // reporter info
+&#125;
+
+type UserControllerProxy struct &#123;
+    userControllerIns UserController
+    metricReporterIns MetricReporter
+&#125;
+
+func (u UserControllerProxy) Login(c context.Context) &#123;
+    var info RequestInfo
+    defer func() &#123;
+        // metric cal
+        u.metricReporterIns.Reporter(info)
+    &#125;()
+
+    u.metricReporterIns.Reporter(info)
+&#125;
+
+func (u UserControllerProxy) Register(c context.Context) &#123;
+    var info RequestInfo
+    defer func() &#123;
+        // metric cal
+        u.metricReporterIns.Reporter(info)
+    &#125;()
+
+    u.userControllerIns.Register(c)
+&#125;
+</code></pre>
+</details>
+
+<p><code>动态代理</code> 没必要那就不用（go 中可以用 go generate生成依赖关系代码）</p>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li>业务系统的非功能性开发。如监控、日志、限流等</li>
+<li>RPC、缓存应用</li>
+</ul>
+<h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><p>“Decouple an abstraction from its implementation so that the two can vary independently”</p>
+<p>“将抽象和实现解耦，让它们可以独立变化”</p>
+<p>“一个类存在两个（或多个）独立变化的维度，我们通过组合的方式，让这两个（或多个）维度可以独立进行扩展”</p>
+<p>ep: <code>gorm</code> 只依赖于 <code>Dialector</code>接口实现，在使用是 注册不同的实现（如下mysql&#x2F;pg） 即可完成不同数据库的切换</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">  <span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">dsn := <span class="string">&quot;&#123;mysql_dns&#125;&quot;</span></span><br><span class="line">DB, err = gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">&quot;gorm.io/driver/postgres&quot;</span></span><br><span class="line"><span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">dsn := <span class="string">&quot;pg_dns&quot;</span></span><br><span class="line">db, err := gorm.Open(postgres.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><p>“用组合代替继承”</p>
+<h4 id="特点-x2F-作用"><a href="#特点-x2F-作用" class="headerlink" title="特点&#x2F;作用"></a>特点&#x2F;作用</h4><ul>
+<li><p>装饰器类和原始类继承同样的父类，这样我们可以对原始类“嵌套”多个装饰器类</p>
+</li>
+<li><p>装饰器类是对功能的增强</p>
+</li>
+</ul>
+<p>示例如下： gzip, buf 均实现了 基于<code>io.Reader</code>的扩展（功能增强） 我们何以嵌套使用</p>
+<details>
+    <summary>demo</summary>
+
+<pre><code>package decorator
+
+import (
+&quot;bufio&quot;
+&quot;bytes&quot;
+&quot;compress/gzip&quot;
+&quot;io&quot;
+&quot;os&quot;
+)
+
+func main() &#123;
+    var count int
+    var err error
+    var f *os.File
+    var g io.Reader
+
+    f, err = os.Open(&quot;demo.txt&quot;) // 返回的*os.File是io.Reader的一个实现 后面的gzip、buf可以说都是委托它来读取的
+    if err != nil &#123;
+        panic(err)
+    &#125;
+    defer f.Close()
+
+    g, err = gzip.NewReader(f)
+    if err != nil &#123;
+        panic(err)
+    &#125;
+
+    reader := bufio.NewReader(g)
+    buffer := bytes.NewBuffer(make([]byte, 0))
+    part := make([]byte, 1000)
+
+    for &#123;
+        if count, err = reader.Read(part); err != nil &#123;
+            panic(err)
+        &#125;
+        buffer.Write(part[:count])
+    &#125;
+
+    return
+&#125;
+</code></pre>
+</details>
+
+
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>将不兼容的接口转换成兼容的接口</p>
+<h4 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li>封装有缺陷的接口设计</li>
+<li>同一多个类的接口设计： 将某类功能的不同实现（可能依赖外部系统）封装成同一的接口定义，这样我们就可以利用多态的特性，实现代码的复用</li>
+<li>替换依赖</li>
+<li>兼容旧版本接口</li>
+</ul>
+<details>
+<summary>demo</summary>
+
+<pre><code>package adaptor
+
+type ITarget interface &#123;
+    F1()
+    F2()
+&#125;
+
+type Adaptee struct &#123;
+&#125;
+
+func (a Adaptee) A1() &#123;
+&#125;
+
+func (a Adaptee) A2() &#123;
+&#125;
+
+type Adaptor struct &#123;
+    a Adaptee
+&#125;
+
+func (a Adaptor) F1() &#123;
+    a.a.A1()
+&#125;
+
+func (a Adaptor) F2() &#123;
+    a.a.A2()
+&#125;
+</code></pre>
+</details>
+
+
+<h3 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Provide a unified interface to a set of interfaces in a subsystem. Facade Pattern defines a higher-level interface that makes the subsystem easier to use.</span><br></pre></td></tr></table></figure>
+
+<p>“为子系统提供一组统一的接口，定义一组高层接口让子系统更易用。”</p>
+<p>分装下层接口，让使用方更加方便（易用性）。</p>
+<h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><p>主要是用来处理树形结构数据（一组对象集合）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Compose objects into tree structure to represent part-whole hierarchies.Composite lets client treat individual objects and compositions of objects uniformly.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将 一组对象 组织（Compose）成树形结构，以表示一种“部分-整体”的层次结构。组合让客户端（代码的使用者）可以统一单个对象和组合对象的处理逻辑（递归）。</span><br><span class="line"></span><br><span class="line">将 一组对象 组织成树形结构，将单个对象和组合对象都看做树中的节点，以统一处理逻辑，并且它利用树形结构的特点，递归地处理每个子树，依次简化代码实现。</span><br></pre></td></tr></table></figure>
+
+<p>与其说是一种设计模式，倒不如说是对业务场景的一种数据结构和算法的抽象。</p>
+<p>示例：<code>Dir</code> <code>File</code> 实现了统一接口定义 <code>FileSystemNode</code>，组成树状结构，递归的方式完成逻辑计算。</p>
+<details>
+    <summary>demo</summary>
+
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+type FileSystemNode interface &#123;
+    CountNumOfFiles() int
+    GetPath() string
+&#125;
+
+func NewFile(path string) *File &#123;
+    return &amp;File&#123;path: path&#125;
+&#125;
+
+type File struct &#123;
+    path string
+&#125;
+
+func (f File) GetPath() string &#123;
+    return f.path
+&#125;
+
+func (f File) CountNumOfFiles() int &#123;
+    return 1
+&#125;
+
+func NewDir(path string) *Dir &#123;
+    return &amp;Dir&#123;path: path&#125;
+&#125;
+
+type Dir struct &#123;
+    path  string
+    nodes []FileSystemNode
+&#125;
+
+func (d Dir) GetPath() string &#123;
+    return d.path
+&#125;
+
+func (d Dir) CountNumOfFiles() int &#123;
+    var count int
+    for _, node := range d.nodes &#123;
+        count += node.CountNumOfFiles()
+    &#125;
+
+    return count
+&#125;
+
+func (d *Dir) AddNode(node FileSystemNode) &#123;
+    d.nodes = append(d.nodes, node)
+&#125;
+
+func (d *Dir) RemoveNode(path string) &#123;
+    var index int = 0
+    for ; index &lt; len(d.nodes) &amp;&amp; d.nodes[index].GetPath() != path; index++ &#123;
+    &#125;
+
+    if index &lt; len(d.nodes) &#123;
+        d.nodes = append(d.nodes[:index], d.nodes[index+1:]...)
+    &#125;
+&#125;
+
+func main() &#123;
+    f1 := NewFile(&quot;a.txt&quot;)
+    f2 := NewFile(&quot;t2/b.txt&quot;)
+
+    d2 := NewDir(&quot;t2&quot;)
+    d2.AddNode(f2)
+    fmt.Println(d2.CountNumOfFiles())
+
+    d1 := NewDir(&quot;&quot;)
+    d1.AddNode(d2)
+    d1.AddNode(f1)
+    fmt.Println(d1.CountNumOfFiles())
+
+    d2.RemoveNode(&quot;t2/b.txt&quot;)
+    fmt.Println(d2.CountNumOfFiles())
+    fmt.Println(d1.CountNumOfFiles())
+&#125;
+</code></pre>
+</details>
+
+
+<h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><p>“被共享的单元”</p>
+<p>享元模式的意图是复用对象，节省内存，前提是享元对象是不可变对象。</p>
+<p>例如： 棋牌游戏中，我们用<code>编号</code>来表示<code>棋子</code>的信息（名称、颜色, 创建好后 固定不变），然后<code>棋盘</code>数据结构中只需要维护<code>编号</code>+<code>坐标</code>信息即可</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://ducknightii.github.io/2023/04/10/Model-Design-%E5%85%AD/" data-id="clgargvwv0006emon4l13b4gi" data-title="设计模式（六）" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Model-Design-五" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/04/07/Model-Design-%E4%BA%94/" class="article-date">
@@ -203,7 +511,7 @@ type ResourcePool struct &#123;
 &#125;
 
 
-// user demo
+// use demo
 pool, err := NewBuilder().
     SetName(&quot;test&quot;).
     SerMaxTotal(20).
@@ -218,7 +526,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clg6i25ep0005aund5cdg7mdp" data-title="设计模式（五）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clgargvwv0005emonclty6zfl" data-title="设计模式（五）" class="article-share-link">分享</a>
       
       
       
@@ -320,7 +628,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/06/Model-Design-%E5%9B%9B/" data-id="clg6i25eq0006aund6fpy3vik" data-title="设计模式（四）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/06/Model-Design-%E5%9B%9B/" data-id="clgargvwy0009emona57q7836" data-title="设计模式（四）" class="article-share-link">分享</a>
       
       
       
@@ -410,7 +718,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clg6i25ej0002aund7rl09s36" data-title="设计模式（三）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clgargvwr0002emon819h91su" data-title="设计模式（三）" class="article-share-link">分享</a>
       
       
       
@@ -510,7 +818,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clg6i25eo0004aundceqr2ux7" data-title="设计模式（二）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clgargvwu0004emonabcn4a4o" data-title="设计模式（二）" class="article-share-link">分享</a>
       
       
       
@@ -649,7 +957,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clg6i25eg0001aund0can7ovr" data-title="设计模式（一）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clgargvwp0001emonevurhj9z" data-title="设计模式（一）" class="article-share-link">分享</a>
       
       
       
@@ -690,7 +998,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clg6i25e70000aund5l2e4qzb" data-title="About me" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clgargvwk0000emonetn7f8uq" data-title="About me" class="article-share-link">分享</a>
       
       
       
@@ -747,6 +1055,10 @@ pool, err := NewBuilder().
       <ul>
         
           <li>
+            <a href="/2023/04/10/Model-Design-%E5%85%AD/">设计模式（六）</a>
+          </li>
+        
+          <li>
             <a href="/2023/04/07/Model-Design-%E4%BA%94/">设计模式（五）</a>
           </li>
         
@@ -760,10 +1072,6 @@ pool, err := NewBuilder().
         
           <li>
             <a href="/2023/04/03/Model-Design-%E4%BA%8C/">设计模式（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2023/03/31/Model-Design-%E4%B8%80/">设计模式（一）</a>
           </li>
         
       </ul>
