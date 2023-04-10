@@ -220,7 +220,7 @@ func (y YamlParser) Parse(filePath string) error {
     }
 
 
-    // user demo
+    // use demo
     pool, err := NewBuilder().
 		SetName("test").
 		SerMaxTotal(20).
