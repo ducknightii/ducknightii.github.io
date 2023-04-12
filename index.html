@@ -372,7 +372,7 @@ func main() &#123;
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/10/Model-Design-%E5%85%AD/" data-id="clgargvwv0006emon4l13b4gi" data-title="设计模式（六）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/10/Model-Design-%E5%85%AD/" data-id="clgdlt2z60006bdox84yp6sch" data-title="设计模式（六）" class="article-share-link">分享</a>
       
       
       
@@ -526,7 +526,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clgargvwv0005emonclty6zfl" data-title="设计模式（五）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/07/Model-Design-%E4%BA%94/" data-id="clgdlt2z50005bdoxc01i3agg" data-title="设计模式（五）" class="article-share-link">分享</a>
       
       
       
@@ -628,7 +628,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/06/Model-Design-%E5%9B%9B/" data-id="clgargvwy0009emona57q7836" data-title="设计模式（四）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/06/Model-Design-%E5%9B%9B/" data-id="clgdlt2z90009bdoxddum75vx" data-title="设计模式（四）" class="article-share-link">分享</a>
       
       
       
@@ -718,7 +718,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clgargvwr0002emon819h91su" data-title="设计模式（三）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/04/Model-Design-%E4%B8%89/" data-id="clgdlt2z10002bdoxa2dod0ln" data-title="设计模式（三）" class="article-share-link">分享</a>
       
       
       
@@ -818,7 +818,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clgargvwu0004emonabcn4a4o" data-title="设计模式（二）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/04/03/Model-Design-%E4%BA%8C/" data-id="clgdlt2z40004bdox88c88oqi" data-title="设计模式（二）" class="article-share-link">分享</a>
       
       
       
@@ -855,7 +855,9 @@ pool, err := NewBuilder().
     <div class="e-content article-entry" itemprop="articleBody">
       
         <h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>写出可扩展、可读、可维护的代码</p>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在此只是一个大纲</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>文章内容是对于 <a target="_blank" rel="noopener" href="https://time.geekbang.org/column/intro/100039001?tab=catalog">极客时间-设计模式之美</a>的学习笔记</p>
+<p>本篇只是一个大纲</p>
+<p>文章中所有示例采用<code>go</code>语言实现，由于<code>go</code>的特性（没有继承 隐式接口定义&#x2F;duck typing），实现方式和标准定义有些区别。</p>
 <h3 id="代码质量评判标准（不是全部）"><a href="#代码质量评判标准（不是全部）" class="headerlink" title="代码质量评判标准（不是全部）"></a>代码质量评判标准（不是全部）</h3><ul>
 <li><p>可维护性</p>
 <p>易维护： 在不破坏原有代码设计、不引入新的bug的基础上，能够快速添加或修改代码。</p>
@@ -887,7 +889,7 @@ pool, err := NewBuilder().
 </ul>
 <h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>我们后续讲的设计思想、原则、模式这些都是为了达成以上目的。</p>
 <p>面向对象中的继承、多态能让我们写出可复用的代码；</p>
-<p>编码规范能让我们写出可读性好的代码 ；</p>
+<p>编码规范能让我们写出可读性好的代码；</p>
 <p>设计原则中的单一职责、DRY、基于接口而非实现、里式替换原则等，可以让我们写出可复用、灵活、可读性好、易扩展、易维护的代码；</p>
 <p>设计模式可以让我们写出易扩展的代码；</p>
 <p>持续重构可以时刻保持代码的可维护性等等。</p>
@@ -942,6 +944,22 @@ pool, err := NewBuilder().
 <li>编程规范解决的是代码可读性问题，更加具体、细节、可落地。是我们进行小重构的理论基础。</li>
 <li>重构是保持代码质量不下降的手段。以上是我们进行重构的理论基础。</li>
 </ul>
+<h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><p>不要过度设计（如果是小项目 不重要 练练手还是可以的）。</p>
+<p>重要的还是分析解决问题的能力，不要”学生气”，为了用而用。</p>
+<p>知识积累+刻意练习</p>
+<p>代码质量意识和设计意识</p>
+<p>脱离业务谈架构都是”耍流氓”。不同场景对于代码的要求是不同的（有的需要快速实现，有的需要足够健壮 可扩展）。</p>
+<p>模式是死的，人是活的。不要照搬设计模式定义，结合实际场景做调整&#x2F;融合。</p>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><h4 id="Code-Review的一些点"><a href="#Code-Review的一些点" class="headerlink" title="Code Review的一些点"></a>Code Review的一些点</h4><ul>
+<li>代码结构是否合理</li>
+<li>代码是否易理解</li>
+<li>业务是否正确</li>
+<li>异常处理是否健全</li>
+<li>并发安全</li>
+<li>性能是否满足需求</li>
+<li>是否符合编码规范</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://google.github.io/eng-practices/review/reviewer/">Google Code Review 最佳实践</a></p>
 <h3 id="业务框架"><a href="#业务框架" class="headerlink" title="业务框架"></a>业务框架</h3><p>MVC       —&gt;    DDD</p>
 <p>贫血模型    —&gt; 充血模型</p>
 <h4 id="一些诉求"><a href="#一些诉求" class="headerlink" title="一些诉求"></a>一些诉求</h4><ul>
@@ -953,11 +971,12 @@ pool, err := NewBuilder().
 <li>IDL</li>
 <li>开发 生产环境的统一</li>
 </ul>
-<h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4>
+<h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">├── biz // 业务层代码</span><br><span class="line">│   ├── dal // 第三方实例化 ep: 数据库连接、缓存</span><br><span class="line">│   ├── dao // dao层 定义do 输出 dto</span><br><span class="line">│   ├── domain // 领域逻辑 dto &lt;-&gt; do </span><br><span class="line">│   ├── errors // 业务层错误定义 </span><br><span class="line">│   ├── handler // controller/service 接收vo -&gt; dto -&gt; vo </span><br><span class="line">│   ├── model // vo 结构定义</span><br><span class="line">│   └── router // 路由</span><br><span class="line">├── cmd</span><br><span class="line">│   ├── server // web server</span><br><span class="line">│   └── tool</span><br><span class="line">├── configs</span><br><span class="line">│   └── config.go</span><br><span class="line">├── go.mod</span><br><span class="line">├── go.sum</span><br><span class="line">├── idl // pb（IDL）</span><br><span class="line">│   ├── api.proto</span><br><span class="line">│   └── watch</span><br><span class="line">├── main.go</span><br><span class="line">├── Makefile // 构造工具</span><br><span class="line">├── pkg // 工具类</span><br><span class="line">└── run // 配置 以及 docker启动文件</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clgargvwp0001emonevurhj9z" data-title="设计模式（一）" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/Model-Design-%E4%B8%80/" data-id="clgdlt2yy0001bdoxbt5gejam" data-title="设计模式（一）" class="article-share-link">分享</a>
       
       
       
@@ -998,7 +1017,7 @@ pool, err := NewBuilder().
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clgargvwk0000emonetn7f8uq" data-title="About me" class="article-share-link">分享</a>
+      <a data-url="https://ducknightii.github.io/2023/03/31/About-me/" data-id="clgdlt2ys0000bdox4xyi53fj" data-title="About me" class="article-share-link">分享</a>
       
       
       
